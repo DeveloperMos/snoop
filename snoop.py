@@ -84,33 +84,29 @@ if time.time() > int(date_up):
 def ravno():
     console.rule(characters = '=', style="cyan bold")
 
-def DB():
+
+def decode_db(_db):
     try:
-        with open('BDdemo', "r", encoding="utf8") as z:
+        with open(_db, "r", encoding="utf8") as z:
             db = z.read()
             db = db.encode("UTF-8")
             db = base64.b64decode(db)
             db = db[::-1]
             db = base64.b64decode(db)
-            trinity = json.loads(db.decode("UTF-8"))
-            return trinity
-    except:
-        print(Style.BRIGHT + Fore.RED + "Упс, что-то пошло не так..." + Style.RESET_ALL)
+            trinity_neo = json.loads(db.decode("UTF-8"))
+            return trinity_neo
+    except Exception as e:
+        print(e, Style.BRIGHT + Fore.RED + "Упс, что-то пошло не так..." + Style.RESET_ALL)
         sys.exit()
 
+
+def DB():
+    return decode_db('BDdemo')
+
+
 def DBflag():
-    try:
-        with open('BDflag', "r", encoding="utf8") as z1:
-            dbf = z1.read()
-            dbf = dbf.encode("UTF-8")
-            dbf = base64.b64decode(dbf)
-            dbf = dbf[::-1]
-            dbf = base64.b64decode(dbf)
-            neo = json.loads(dbf.decode("UTF-8"))
-            return neo
-    except:
-        print(Style.BRIGHT + Fore.RED + "Упс, что-то пошло не так..." + Style.RESET_ALL)
-        sys.exit()
+    return decode_db('BDflag')
+
 
 # Флаг БС.
 def baza():
@@ -118,39 +114,28 @@ def baza():
     return BS
 flagBS = len(baza())
 
+
 # Создание директорий результатов.
-try:
-    os.makedirs(str(dirresults + "/results"))
-except:
-    pass
-try:
-    os.makedirs(str(dirresults + "/results/html"))
-except:
-    pass
-try:
-    os.makedirs(str(dirresults + "/results/txt"))
-except:
-    pass
-try:
-    os.makedirs(str(dirresults + "/results/csv"))
-except:
-    pass
-try:
-    os.makedirs(str(dirresults + "/results/save reports"))
-except:
-    pass
-try:
-    os.makedirs(str(dirresults + "/results/ReverseVgeocoder"))
-except:
-    pass
-try:
-    os.makedirs(str(dirresults + "/results/Yandex_parser"))
-except:
-    pass
-try:
-    os.makedirs(str(dirresults + "/results/domain"))
-except:
-    pass
+def make_sure_path_exists(path, sub_path):
+    if not os.path.exists(path + sub_path):
+        os.makedirs(path + sub_path)
+
+
+dirs = {
+    1: '/results',
+    2: '/results/html',
+    3: '/results/txt',
+    4: '/results/csv',
+    5: '/results/save reports',
+    6: '/results/ReverseVgeocoder',
+    7: '/results/Yandex_parser',
+    8: '/results/domain'
+}
+
+for _dir in dirs.values():
+    make_sure_path_exists(dirresults, _dir)
+
+
 ################################################################################
 class ElapsedFuturesSession(FuturesSession):
     """test_metrica: API:: https://pypi.org/project/requests-futures/"""
